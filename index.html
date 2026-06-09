@@ -1189,6 +1189,8 @@
             }
         }
     </style>
+    <!-- Supabase Client JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -1655,25 +1657,37 @@
             }
         });
 
-        // --- 3. Local Storage: Water Tanker Directory ---
-        // Mock data for fresh loads
+        // --- Supabase Client Initialization ---
+        const supabaseUrl = 'https://rziyqqurvhxdmhwchuuq.supabase.co';
+        const supabaseKey = 'sb_publishable_xPiEKwgbj6WQ-2L4Gb9wWQ_sWKXdznH';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- 3. Database & Fallback: Water Tanker Directory ---
+        // Mock data for fresh loads/fallbacks
         const mockTankers = [
             { name: "Jan Mohammad", phone: "03001234567", area: "East Bay / Mullah Band" },
             { name: "Sajid Baloch", phone: "03217654321", area: "Pishukan / Gwadar West" },
             { name: "Rahim Bakhsh", phone: "03339876543", area: "New Town / Central" }
         ];
 
-        function getTankers() {
-            const data = localStorage.getItem('gwadar_tankers');
-            if (!data) {
-                localStorage.setItem('gwadar_tankers', JSON.stringify(mockTankers));
+        async function fetchTankers() {
+            try {
+                const { data, error } = await supabase
+                    .from('tankers')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                if (!data || data.length === 0) return mockTankers;
+                return data;
+            } catch (err) {
+                console.error("Error fetching tankers from Supabase:", err);
                 return mockTankers;
             }
-            return JSON.parse(data);
         }
 
-        function renderTankers(filterText = '') {
-            const tankers = getTankers();
+        async function renderTankers(filterText = '') {
+            const tankers = await fetchTankers();
             const listContainer = document.getElementById('tankerList');
             listContainer.innerHTML = '';
 
@@ -1708,55 +1722,69 @@
             renderTankers(e.target.value);
         });
 
-        document.getElementById('tankerForm').addEventListener('submit', (e) => {
+        document.getElementById('tankerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('tankerName').value.trim();
             const phone = document.getElementById('tankerPhone').value.trim();
             const area = document.getElementById('tankerArea').value.trim();
 
             if (name && phone && area) {
-                const tankers = getTankers();
-                tankers.push({ name, phone, area });
-                localStorage.setItem('gwadar_tankers', JSON.stringify(tankers));
+                try {
+                    const { error } = await supabase
+                        .from('tankers')
+                        .insert([{ name, phone, area }]);
+                    
+                    if (error) throw error;
 
-                document.getElementById('tankerForm').reset();
-                renderTankers();
+                    document.getElementById('tankerForm').reset();
+                    await renderTankers();
 
-                const toast = document.getElementById('tankerToast');
-                toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 4000);
+                    const toast = document.getElementById('tankerToast');
+                    toast.style.display = 'block';
+                    setTimeout(() => { toast.style.display = 'none'; }, 4000);
+                } catch (err) {
+                    console.error("Error adding tanker to Supabase:", err);
+                    alert("Error registering tanker. Please verify your Supabase tables are created.");
+                }
             }
         });
 
-        // --- 4. Local Storage: Reports Forum ---
+        // --- 4. Database & Fallback: Reports Forum ---
         const mockReports = [
             {
                 name: "Kareem Baloch",
                 category: "Water Scarcity",
                 location: "Mullah Band Road",
                 message: "No clean water supply in our area for the last 3 days. Tanker prices are extremely high.",
-                timestamp: new Date(Date.now() - 3600000 * 24).toISOString() // 1 day ago
+                timestamp: new Date(Date.now() - 3600000 * 24).toISOString()
             },
             {
                 name: "Zarif Gwadari",
                 category: "Fishing Community",
                 location: "West Bay Jetty",
                 message: "Gwadar jetty expansion is restricting local fisherman boats access. We need dedicated docks.",
-                timestamp: new Date(Date.now() - 3600000 * 5).toISOString() // 5 hours ago
+                timestamp: new Date(Date.now() - 3600000 * 5).toISOString()
             }
         ];
 
-        function getReports() {
-            const data = localStorage.getItem('gwadar_reports');
-            if (!data) {
-                localStorage.setItem('gwadar_reports', JSON.stringify(mockReports));
+        async function fetchReports() {
+            try {
+                const { data, error } = await supabase
+                    .from('complaints')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                if (!data || data.length === 0) return mockReports;
+                return data;
+            } catch (err) {
+                console.error("Error fetching reports from Supabase:", err);
                 return mockReports;
             }
-            return JSON.parse(data);
         }
 
-        function renderReports() {
-            const reports = getReports();
+        async function renderReports() {
+            const reports = await fetchReports();
             const board = document.getElementById('reportsBoard');
             board.innerHTML = '';
 
@@ -1765,14 +1793,17 @@
                 return;
             }
 
-            // Display newest first
-            const sortedReports = [...reports].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const sortedReports = [...reports].sort((a, b) => {
+                const timeA = a.created_at || a.timestamp;
+                const timeB = b.created_at || b.timestamp;
+                return new Date(timeB) - new Date(timeA);
+            });
 
             sortedReports.forEach(report => {
                 const item = document.createElement('div');
                 item.className = 'report-item';
                 
-                const timeString = formatTime(report.timestamp);
+                const timeString = formatTime(report.created_at || report.timestamp);
 
                 item.innerHTML = `
                     <div class="report-meta">
@@ -1791,7 +1822,7 @@
             });
         }
 
-        document.getElementById('reportForm').addEventListener('submit', (e) => {
+        document.getElementById('reportForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('reporterName').value.trim();
             const category = document.getElementById('reportCategory').value;
@@ -1799,22 +1830,23 @@
             const message = document.getElementById('reportMessage').value.trim();
 
             if (name && category && location && message) {
-                const reports = getReports();
-                reports.push({
-                    name,
-                    category,
-                    location,
-                    message,
-                    timestamp: new Date().toISOString()
-                });
-                localStorage.setItem('gwadar_reports', JSON.stringify(reports));
+                try {
+                    const { error } = await supabase
+                        .from('complaints')
+                        .insert([{ name, category, location, message }]);
+                    
+                    if (error) throw error;
 
-                document.getElementById('reportForm').reset();
-                renderReports();
+                    document.getElementById('reportForm').reset();
+                    await renderReports();
 
-                const toast = document.getElementById('reportToast');
-                toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 4000);
+                    const toast = document.getElementById('reportToast');
+                    toast.style.display = 'block';
+                    setTimeout(() => { toast.style.display = 'none'; }, 4000);
+                } catch (err) {
+                    console.error("Error submitting complaint to Supabase:", err);
+                    alert("Error submitting report. Please verify your Supabase tables are created.");
+                }
             }
         });
 
@@ -1846,9 +1878,9 @@
         }
 
         // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
-            renderTankers();
-            renderReports();
+        window.addEventListener('DOMContentLoaded', async () => {
+            await renderTankers();
+            await renderReports();
         });
     </script>
 </body>
