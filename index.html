@@ -1660,7 +1660,18 @@
         // --- Supabase Client Initialization ---
         const supabaseUrl = 'https://rziyqqurvhxdmhwchuuq.supabase.co';
         const supabaseKey = 'sb_publishable_xPiEKwgbj6WQ-2L4Gb9wWQ_sWKXdznH';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        let supabaseClient = null;
+
+        try {
+            // Check if global supabase variable is defined by UMD CDN bundle
+            if (window.supabase) {
+                supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+            } else {
+                console.warn("Supabase library not loaded. Operating in LocalStorage fallback mode.");
+            }
+        } catch (err) {
+            console.error("Failed to initialize Supabase client:", err);
+        }
 
         // --- 3. Database & Fallback: Water Tanker Directory ---
         // Mock data for fresh loads/fallbacks
@@ -1670,19 +1681,31 @@
             { name: "Rahim Bakhsh", phone: "03339876543", area: "New Town / Central" }
         ];
 
+        function getLocalTankers() {
+            const data = localStorage.getItem('gwadar_tankers');
+            if (!data) {
+                localStorage.setItem('gwadar_tankers', JSON.stringify(mockTankers));
+                return mockTankers;
+            }
+            return JSON.parse(data);
+        }
+
         async function fetchTankers() {
+            if (!supabaseClient) {
+                return getLocalTankers();
+            }
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('tankers')
                     .select('*')
                     .order('created_at', { ascending: false });
                 
                 if (error) throw error;
-                if (!data || data.length === 0) return mockTankers;
+                if (!data || data.length === 0) return getLocalTankers();
                 return data;
             } catch (err) {
                 console.error("Error fetching tankers from Supabase:", err);
-                return mockTankers;
+                return getLocalTankers();
             }
         }
 
@@ -1729,23 +1752,30 @@
             const area = document.getElementById('tankerArea').value.trim();
 
             if (name && phone && area) {
-                try {
-                    const { error } = await supabase
-                        .from('tankers')
-                        .insert([{ name, phone, area }]);
-                    
-                    if (error) throw error;
+                // Save locally first
+                const localTankers = getLocalTankers();
+                localTankers.push({ name, phone, area });
+                localStorage.setItem('gwadar_tankers', JSON.stringify(localTankers));
 
-                    document.getElementById('tankerForm').reset();
-                    await renderTankers();
-
-                    const toast = document.getElementById('tankerToast');
-                    toast.style.display = 'block';
-                    setTimeout(() => { toast.style.display = 'none'; }, 4000);
-                } catch (err) {
-                    console.error("Error adding tanker to Supabase:", err);
-                    alert("Error registering tanker. Please verify your Supabase tables are created.");
+                // Save to online database if online
+                if (supabaseClient) {
+                    try {
+                        const { error } = await supabaseClient
+                            .from('tankers')
+                            .insert([{ name, phone, area }]);
+                        
+                        if (error) throw error;
+                    } catch (err) {
+                        console.error("Error adding tanker to Supabase:", err);
+                    }
                 }
+
+                document.getElementById('tankerForm').reset();
+                await renderTankers();
+
+                const toast = document.getElementById('tankerToast');
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 4000);
             }
         });
 
@@ -1767,19 +1797,31 @@
             }
         ];
 
+        function getLocalReports() {
+            const data = localStorage.getItem('gwadar_reports');
+            if (!data) {
+                localStorage.setItem('gwadar_reports', JSON.stringify(mockReports));
+                return mockReports;
+            }
+            return JSON.parse(data);
+        }
+
         async function fetchReports() {
+            if (!supabaseClient) {
+                return getLocalReports();
+            }
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('complaints')
                     .select('*')
                     .order('created_at', { ascending: false });
                 
                 if (error) throw error;
-                if (!data || data.length === 0) return mockReports;
+                if (!data || data.length === 0) return getLocalReports();
                 return data;
             } catch (err) {
                 console.error("Error fetching reports from Supabase:", err);
-                return mockReports;
+                return getLocalReports();
             }
         }
 
@@ -1830,23 +1872,32 @@
             const message = document.getElementById('reportMessage').value.trim();
 
             if (name && category && location && message) {
-                try {
-                    const { error } = await supabase
-                        .from('complaints')
-                        .insert([{ name, category, location, message }]);
-                    
-                    if (error) throw error;
+                const timestamp = new Date().toISOString();
+                
+                // Save locally first
+                const localReports = getLocalReports();
+                localReports.push({ name, category, location, message, timestamp });
+                localStorage.setItem('gwadar_reports', JSON.stringify(localReports));
 
-                    document.getElementById('reportForm').reset();
-                    await renderReports();
-
-                    const toast = document.getElementById('reportToast');
-                    toast.style.display = 'block';
-                    setTimeout(() => { toast.style.display = 'none'; }, 4000);
-                } catch (err) {
-                    console.error("Error submitting complaint to Supabase:", err);
-                    alert("Error submitting report. Please verify your Supabase tables are created.");
+                // Save to online database if online
+                if (supabaseClient) {
+                    try {
+                        const { error } = await supabaseClient
+                            .from('complaints')
+                            .insert([{ name, category, location, message }]);
+                        
+                        if (error) throw error;
+                    } catch (err) {
+                        console.error("Error submitting complaint to Supabase:", err);
+                    }
                 }
+
+                document.getElementById('reportForm').reset();
+                await renderReports();
+
+                const toast = document.getElementById('reportToast');
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 4000);
             }
         });
 
