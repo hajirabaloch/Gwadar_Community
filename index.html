@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gwadar Portal — Gateway to Arabia</title>
+    <meta name="description" content="Official community portal for Gwadar. Connecting residents, reporting issues, finding water tankers, and highlighting CPEC investments.">
+    <!-- Google Fonts: Playfair Display for headers, Montserrat for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --color-bg-dark: #071026;
+            --color-navy: #0B1B3D;
+            --color-navy-light: #152E5A;
+            --color-navy-card: rgba(11, 27, 61, 0.85);
+            --color-gold: #D4AF37;
+            --color-gold-light: #F3E5AB;
+            --color-gold-hover: #AA7C11;
+            --color-gold-muted: #C5A059;
+            --color-text-light: #F3F4F6;
+            --color-text-muted: #9CA3AF;
+            --color-white: #FFFFFF;
+            --font-headings: 'Playfair Display', Georgia, serif;
+            --font-body: 'Montserrat', Helvetica, Arial, sans-serif;
+            --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.15);
+            --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: var(--font-headings);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Layout Utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-padding {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 1rem;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--color-gold);
+        }
+
+        .section-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.8rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+        }
+
+        .btn-gold {
+            background-color: var(--color-gold);
+            color: var(--color-bg-dark);
+            border: 2px solid var(--color-gold);
+        }
+
+        .btn-gold:hover {
+            background-color: var(--color-gold-hover);
+            border-color: var(--color-gold-hover);
+            color: var(--color-white);
+            box-shadow: var(--shadow-gold);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-gold);
+            border: 2px solid var(--color-gold);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-gold);
+            color: var(--color-bg-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Navigation Bar */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: var(--transition-smooth);
+            background-color: rgba(7, 16, 38, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        header.scrolled {
+            background-color: var(--color-bg-dark);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 1.2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-box {
+            margin-right: auto;
+        }
+
+        .logo {
+            font-family: var(--font-headings);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--color-white);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition-smooth);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--color-gold);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-gold);
+            transition: var(--transition-smooth);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-gold);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 90vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background-image: linear-gradient(rgba(7, 16, 38, 0.75), rgba(7, 16, 38, 0.9)), url('images/WhatsApp Image 2026-01-17 at 12.35.53 PM.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--color-gold);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: 3.8rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--color-white);
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-title span {
+            color: var(--color-gold);
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            max-width: 650px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        /* Stats Bar */
+        .stats-section {
+            background-color: var(--color-navy);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            z-index: 10;
+            padding: 2.5rem 0;
+            box-shadow: var(--shadow-card);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-card {
+            padding: 1rem;
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            transition: var(--transition-smooth);
+        }
+
+        .stat-card:last-child {
+            border-right: none;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-num {
+            font-family: var(--font-headings);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-text-light);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            color: var(--color-white);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            text-align: justify;
+        }
+
+        .about-highlight {
+            border-left: 3px solid var(--color-gold);
+            padding-left: 1.5rem;
+            font-style: italic;
+            margin: 2rem 0;
+            color: var(--color-gold-light);
+        }
+
+        .about-image-wrapper {
+            position: relative;
+        }
+
+        .about-image-container {
+            position: relative;
+            border: 2px solid var(--color-gold);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition-smooth);
+        }
+
+        .about-image-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(11, 27, 61, 0.1), rgba(11, 27, 61, 0.4));
+            z-index: 1;
+            transition: var(--transition-smooth);
+        }
+
+        .about-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .about-image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .about-image-container:hover::before {
+            background: transparent;
+        }
+
+        /* Photo Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: var(--shadow-card);
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(7, 16, 38, 0.95) 15%, rgba(7, 16, 38, 0.3) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            opacity: 0;
+            transition: var(--transition-smooth);
+            z-index: 2;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-title {
+            font-size: 1.3rem;
+            color: var(--color-gold);
+            margin-bottom: 0.3rem;
+        }
+
+        .gallery-desc {
+            font-size: 0.85rem;
+            color: var(--color-white);
+        }
+
+        .gallery-zoom-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(212, 175, 55, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-bg-dark);
+            transform: scale(0.7);
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .gallery-item:hover .gallery-zoom-icon {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(7, 16, 38, 0.98);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 80%;
+            text-align: center;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 75vh;
+            object-fit: contain;
+            border: 2px solid var(--color-gold);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            border-radius: 4px;
+            transform: scale(0.9);
+            transition: transform 0.4s ease;
+        }
+
+        .lightbox.active .lightbox-img {
+            transform: scale(1);
+        }
+
+        .lightbox-caption {
+            margin-top: 1.5rem;
+            color: var(--color-white);
+        }
+
+        .lightbox-title {
+            font-family: var(--font-headings);
+            font-size: 1.6rem;
+            color: var(--color-gold);
+            margin-bottom: 0.3rem;
+        }
+
+        .lightbox-desc {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .lightbox-close:hover {
+            color: var(--color-gold);
+        }
+
+        .lightbox-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(11, 27, 61, 0.7);
+            border: 1px solid var(--color-gold);
+            color: var(--color-gold);
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+            z-index: 10;
+        }
+
+        .lightbox-btn:hover {
+            background-color: var(--color-gold);
+            color: var(--color-bg-dark);
+        }
+
+        .lightbox-prev {
+            left: -100px;
+        }
+
+        .lightbox-next {
+            right: -100px;
+        }
+
+        /* Issues Section */
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+        }
+
+        .issue-card {
+            background-color: var(--color-navy);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 4px;
+            padding: 3rem 2rem;
+            position: relative;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .issue-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--color-gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition-smooth);
+        }
+
+        .issue-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .issue-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .issue-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .issue-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-gold);
+            transition: var(--transition-smooth);
+            flex-shrink: 0;
+        }
+
+        .issue-card:hover .issue-icon {
+            background-color: var(--color-gold);
+            color: var(--color-bg-dark);
+        }
+
+        .issue-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        .issue-title {
+            font-size: 1.5rem;
+            color: var(--color-white);
+        }
+
+        .issue-card p {
+            margin-bottom: 1.5rem;
+        }
+
+        .issue-status-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background-color: rgba(212, 175, 55, 0.15);
+            color: var(--color-gold-light);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* Combined Directory & Form Layout Grid */
+        .directory-report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .glass-box {
+            background-color: var(--color-navy-card);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-card);
+            backdrop-filter: blur(5px);
+        }
+
+        .box-title {
+            font-size: 1.8rem;
+            color: var(--color-gold);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .box-title svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--color-gold);
+        }
+
+        /* Forms styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background-color: rgba(7, 16, 38, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            color: var(--color-white);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            background-color: rgba(7, 16, 38, 0.8);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        select.form-control option {
+            background-color: var(--color-bg-dark);
+            color: var(--color-white);
+        }
+
+        /* Water Tanker Directory details */
+        .directory-search {
+            margin-bottom: 1.5rem;
+        }
+
+        .directory-list {
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .directory-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .directory-list::-webkit-scrollbar-track {
+            background: rgba(7, 16, 38, 0.3);
+        }
+
+        .directory-list::-webkit-scrollbar-thumb {
+            background: var(--color-navy-light);
+            border-radius: 3px;
+        }
+
+        .directory-list::-webkit-scrollbar-thumb:hover {
+            background: var(--color-gold);
+        }
+
+        .tanker-item {
+            background-color: rgba(7, 16, 38, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 4px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-smooth);
+        }
+
+        .tanker-item:hover {
+            border-color: var(--color-gold);
+            background-color: rgba(7, 16, 38, 0.7);
+        }
+
+        .tanker-info h4 {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--color-white);
+            font-weight: 600;
+        }
+
+        .tanker-info p {
+            font-size: 0.8rem;
+            color: var(--color-gold-light);
+            margin-top: 0.2rem;
+        }
+
+        .btn-call {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            background-color: var(--color-gold);
+            color: var(--color-bg-dark);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: var(--transition-smooth);
+            border: 1px solid var(--color-gold);
+        }
+
+        .btn-call:hover {
+            background-color: transparent;
+            color: var(--color-gold);
+        }
+
+        .btn-call svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        /* Reports display */
+        .reports-list {
+            margin-top: 2rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .reports-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .reports-list::-webkit-scrollbar-track {
+            background: rgba(7, 16, 38, 0.3);
+        }
+
+        .reports-list::-webkit-scrollbar-thumb {
+            background: var(--color-navy-light);
+            border-radius: 3px;
+        }
+
+        .reports-list::-webkit-scrollbar-thumb:hover {
+            background: var(--color-gold);
+        }
+
+        .report-item {
+            background-color: rgba(7, 16, 38, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 4px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .report-item:hover {
+            border-color: var(--color-gold);
+            background-color: rgba(7, 16, 38, 0.7);
+        }
+
+        .report-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .report-author {
+            font-weight: 600;
+            color: var(--color-white);
+            font-size: 0.9rem;
+        }
+
+        .report-category {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            background-color: rgba(212, 175, 55, 0.15);
+            color: var(--color-gold);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .report-location {
+            font-size: 0.8rem;
+            color: var(--color-gold-light);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .report-location svg {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+        }
+
+        .report-message {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            line-height: 1.5;
+            background-color: rgba(0, 0, 0, 0.15);
+            padding: 0.6rem 0.8rem;
+            border-radius: 4px;
+        }
+
+        .success-toast {
+            background-color: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--color-gold);
+            color: var(--color-gold-light);
+            padding: 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            display: none;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #040A18;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 4rem 0 2rem 0;
+            color: var(--color-text-muted);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(2, 0.8fr);
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.6rem;
+            color: var(--color-gold);
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            max-width: 350px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            color: var(--color-white);
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-links h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--color-gold);
+        }
+
+        .footer-menu {
+            list-style: none;
+        }
+
+        .footer-menu li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-menu a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+        }
+
+        .footer-menu a:hover {
+            color: var(--color-gold);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--color-navy);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-gold);
+            transition: var(--transition-smooth);
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background-color: var(--color-gold);
+            color: var(--color-bg-dark);
+            transform: translateY(-3px);
+        }
+
+        .social-link svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive adjustments */
+        @media (max-width: 1024px) {
+            .about-grid, .directory-report-grid, .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .lightbox-prev {
+                left: -60px;
+            }
+
+            .lightbox-next {
+                right: -60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 4rem 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: -100vh;
+                left: 0;
+                width: 100%;
+                background-color: var(--color-bg-dark);
+                flex-direction: column;
+                align-items: center;
+                padding: 4rem 0;
+                transition: var(--transition-smooth);
+                border-bottom: 2px solid var(--color-gold);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+
+            .nav-menu.active {
+                top: 70px;
+            }
+
+            .hero {
+                height: 80vh;
+                min-height: 500px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-desc {
+                font-size: 0.95rem;
+            }
+
+            .hero-btns {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .stat-card {
+                border-right: none;
+                border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+                padding-bottom: 1.5rem;
+            }
+
+            .stat-card:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            .gallery-grid, .issues-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-item {
+                height: 250px;
+            }
+
+            .lightbox-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.8rem;
+            }
+
+            .lightbox-prev {
+                left: 10px;
+            }
+
+            .lightbox-next {
+                right: 10px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header id="header">
+        <div class="nav-container">
+            <div class="logo-box">
+                <a href="#" class="logo">
+                    GWADAR<span>PORTAL</span>
+                </a>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+                &#9776;
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#gallery" class="nav-link">Gallery</a></li>
+                <li><a href="#issues" class="nav-link">Issues</a></li>
+                <li><a href="#tankers" class="nav-link">Tanker Directory</a></li>
+                <li><a href="#report" class="nav-link">Reports</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-subtitle">The Strategic Gateway to Central Asia</p>
+                <h1 class="hero-title">Gwadar Portal —<br><span>Gateway to Arabia</span></h1>
+                <p class="hero-desc">Connecting communities, providing crucial resources, and reporting real-time challenges at the core of the China-Pakistan Economic Corridor (CPEC).</p>
+                <div class="hero-btns">
+                    <a href="#tankers" class="btn btn-gold">Water Directory</a>
+                    <a href="#report" class="btn btn-outline">Report an Issue</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-area">14,637</span>
+                    <span class="stat-label">Area (Sq Km)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-pop">138,000</span>
+                    <span class="stat-label">Population (Est.)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-cpec">$62B+</span>
+                    <span class="stat-label">CPEC Investment</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section-padding" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3 style="font-family: var(--font-headings); color: var(--color-gold); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem;">Geopolitical Landmark</h3>
+                    <h2>About the Port City</h2>
+                    <p class="about-highlight">"Positioned at the mouth of the Persian Gulf, Gwadar sits as a warm-water, deep-sea port designed to redefine international maritime trade routes."</p>
+                    <p>Gwadar has transformed from a quiet fishing town into a focal point of global geopolitics. Strategically situated in Balochistan, Pakistan, it lies just outside the Strait of Hormuz, a key shipping route for the global oil trade. As the terminal point of the China-Pakistan Economic Corridor (CPEC), Gwadar is poised to handle major commercial shipping, linking the landlocked nations of Central Asia directly to the Arabian Sea.</p>
+                    <p>Despite its massive strategic potential and multi-billion dollar investment plans, Gwadar is also a city of residents. Balancing rapid development with community needs—like freshwater provision, fishing rights, and basic infrastructure—is critical for its sustainable growth.</p>
+                </div>
+                <div class="about-image-wrapper">
+                    <div class="about-image-container">
+                        <img src="11.jpeg" alt="Gwadar Cliffs at Sunset">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section class="section-padding" id="gallery" style="background-color: rgba(11, 27, 61, 0.3); border-top: 1px solid rgba(212, 175, 55, 0.1); border-bottom: 1px solid rgba(212, 175, 55, 0.1);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Gwadar in Focus</h2>
+                <p>Visual highlights of the coastal highway, traditional community lives, cliffs at sunset, and the emerging aerial landscape of the port city.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" data-index="0">
+                    <img src="WhatsApp Image 2026-01-17 at 12.35.53 PM.jpeg" alt="Gwadar City Aerial View">
+                    <div class="gallery-overlay">
+                        <h4 class="gallery-title">Gwadar City Aerial View</h4>
+                        <p class="gallery-desc">Overlooking the hammerhead peninsula and the deep-sea harbor.</p>
+                    </div>
+                    <div class="gallery-zoom-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </div>
+                </div>
+                <div class="gallery-item" data-index="1">
+                    <img src="9.jpeg" alt="Gwadar Coastal Highway">
+                    <div class="gallery-overlay">
+                        <h4 class="gallery-title">Coastal Highway</h4>
+                        <p class="gallery-desc">The scenic Makran Coastal Highway connecting Karachi to Gwadar.</p>
+                    </div>
+                    <div class="gallery-zoom-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </div>
+                </div>
+                <div class="gallery-item" data-index="2">
+                    <img src="11.jpeg" alt="Gwadar Cliffs at Sunset">
+                    <div class="gallery-overlay">
+                        <h4 class="gallery-title">Cliffs at Sunset</h4>
+                        <p class="gallery-desc">Golden rays reflecting off the majestic hammerhead cliffs.</p>
+                    </div>
+                    <div class="gallery-zoom-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </div>
+                </div>
+                <div class="gallery-item" data-index="3">
+                    <img src="15.jpeg" alt="Women carrying water">
+                    <div class="gallery-overlay">
+                        <h4 class="gallery-title">Local Livelihoods</h4>
+                        <p class="gallery-desc">Local women transporting water - reflecting the local supply challenges.</p>
+                    </div>
+                    <div class="gallery-zoom-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightboxClose" aria-label="Close Gallery">&times;</button>
+            <button class="lightbox-btn lightbox-prev" id="lightboxPrev" aria-label="Previous Image">&#8249;</button>
+            <img src="" alt="Zoomed View" class="lightbox-img" id="lightboxImg">
+            <button class="lightbox-btn lightbox-next" id="lightboxNext" aria-label="Next Image">&#8250;</button>
+            <div class="lightbox-caption">
+                <h4 class="lightbox-title" id="lightboxTitle"></h4>
+                <p class="lightbox-desc" id="lightboxDesc"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issues Section -->
+    <section class="section-padding" id="issues">
+        <div class="container">
+            <div class="section-header">
+                <h2>Key Community Challenges</h2>
+                <p>Ensuring sustainable development in Gwadar requires direct attention to the critical daily challenges faced by the local population.</p>
+            </div>
+            <div class="issues-grid">
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">
+                            <!-- SVG Water Drop Icon -->
+                            <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                        </div>
+                        <h3 class="issue-title">Water Scarcity</h3>
+                    </div>
+                    <p>Clean drinking water remains Gwadar’s most critical challenge. Groundwater levels are dangerously low and local reservoirs run dry regularly. High reliance on water tankers and desalination plants makes daily supply expensive and irregular for average families.</p>
+                    <span class="issue-status-badge">Critical Concern</span>
+                </div>
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">
+                            <!-- SVG Road Icon -->
+                            <svg viewBox="0 0 24 24"><path d="M19 15v-3h-2v3h-3v2h3v3h2v-3h3v-2h-3zm-6-2.58V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5v9.92A6 6 0 1 0 13 12.42zM12 20c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                        </div>
+                        <h3 class="issue-title">Roads & Connection</h3>
+                    </div>
+                    <p>While the Makran Coastal Highway connects Gwadar to major hubs, inner-city roads and neighborhood connections are frequently unpaved, leading to erosion during brief rains and severe dust blockages during windstorms.</p>
+                    <span class="issue-status-badge">Under Construction</span>
+                </div>
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">
+                            <!-- SVG Healthcare Cross Icon -->
+                            <svg viewBox="0 0 24 24"><path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/></svg>
+                        </div>
+                        <h3 class="issue-title">Healthcare Access</h3>
+                    </div>
+                    <p>Access to specialized healthcare remains limited. Although new Chinese-funded medical institutions are under construction, residents often must travel to Karachi (approx. 7 hours away) for emergency or advanced medical operations.</p>
+                    <span class="issue-status-badge">In Progress</span>
+                </div>
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">
+                            <!-- SVG Fishing Hook/Anchor Icon -->
+                            <svg viewBox="0 0 24 24"><path d="M17 18c-1.1 0-1.99-.9-1.99-2s.89-2 1.99-2 2 .9 2 2-.9 2-2 2zm-5-8c-1.66 0-3 1.34-3 3v7h6v-7c0-1.66-1.34-3-3-3zm5-5H7v2h10V5z"/></svg>
+                        </div>
+                        <h3 class="issue-title">Fishing Community</h3>
+                    </div>
+                    <p>The local fishing community comprises over 65% of Gwadar's economy. High-tech port expansions and deep-sea trawler restrictions threaten standard fishing routes and docking bays, requiring active legal protection of local jetty areas.</p>
+                    <span class="issue-status-badge">High Priority</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Water Tanker Directory & Reports Section -->
+    <section class="section-padding" id="tankers" style="background-color: rgba(11, 27, 61, 0.3); border-top: 1px solid rgba(212, 175, 55, 0.1); border-bottom: 1px solid rgba(212, 175, 55, 0.1);">
+        <div class="container">
+            <div class="directory-report-grid">
+                
+                <!-- Water Tanker Directory Box -->
+                <div class="glass-box">
+                    <h3 class="box-title">
+                        <svg viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.4-8 11.5C4 17.64 7.36 21 11.5 21S19 17.64 19 13.5C19 10.4 16.33 6.55 12 2zm0 17c-3.03 0-5.5-2.47-5.5-5.5 0-2.32 2.14-5.4 5.5-8.41 3.36 3.01 5.5 6.08 5.5 8.41 0 3.03-2.47 5.5-5.5 5.5z"/></svg>
+                        Water Tanker Directory
+                    </h3>
+                    
+                    <div class="directory-search">
+                        <input type="text" id="searchTanker" class="form-control" placeholder="Search by name or service area...">
+                    </div>
+
+                    <div class="directory-list" id="tankerList">
+                        <!-- Tanker entries will be loaded dynamically -->
+                    </div>
+
+                    <h4 style="font-family: var(--font-headings); color: var(--color-gold); font-size: 1.2rem; margin-bottom: 1rem;">Register as a Tanker Owner</h4>
+                    <div class="success-toast" id="tankerToast">Tanker successfully registered!</div>
+                    <form id="tankerForm">
+                        <div class="form-group">
+                            <label class="form-label" for="tankerName">Owner Name</label>
+                            <input type="text" id="tankerName" class="form-control" required placeholder="e.g. Sajid Baloch">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="tankerPhone">Phone Number</label>
+                            <input type="tel" id="tankerPhone" class="form-control" required placeholder="e.g. 03001234567">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="tankerArea">Service Area</label>
+                            <input type="text" id="tankerArea" class="form-control" required placeholder="e.g. New Town / East Bay">
+                        </div>
+                        <button type="submit" class="btn btn-gold" style="width: 100%;">Add to Directory</button>
+                    </form>
+                </div>
+
+                <!-- Reports Section Box -->
+                <div class="glass-box" id="report">
+                    <h3 class="box-title">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        Report issues in Gwadar
+                    </h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Let us know about utility issues. Submissions are saved locally to compile community feedback.</p>
+                    
+                    <div class="success-toast" id="reportToast">Report submitted and saved to feedback board!</div>
+                    <form id="reportForm">
+                        <div class="form-group">
+                            <label class="form-label" for="reporterName">Your Name</label>
+                            <input type="text" id="reporterName" class="form-control" required placeholder="e.g. Karim Baloch">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="reportCategory">Category</label>
+                            <select id="reportCategory" class="form-control" required>
+                                <option value="" disabled selected>Select Category</option>
+                                <option value="Water Scarcity">Water Scarcity</option>
+                                <option value="Roads & Connection">Roads & Connection</option>
+                                <option value="Healthcare Access">Healthcare Access</option>
+                                <option value="Fishing Community">Fishing Community</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="reportLocation">Location in Gwadar</label>
+                            <input type="text" id="reportLocation" class="form-control" required placeholder="e.g. Mullah Band, Near Jetty">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="reportMessage">Message / Details</label>
+                            <textarea id="reportMessage" class="form-control" rows="4" required placeholder="Describe the problem in detail..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-gold" style="width: 100%;">Submit Report</button>
+                    </form>
+
+                    <h4 style="font-family: var(--font-headings); color: var(--color-gold); font-size: 1.2rem; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(212, 175, 55, 0.15); padding-bottom: 0.5rem;">Recent Community Board</h4>
+                    <div class="reports-list" id="reportsBoard">
+                        <!-- Community reports loaded dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>GWADAR PORTAL</h3>
+                    <p>The centralized community web hub highlighting progress, managing local logistics, and communicating citizen issues for a better tomorrow.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m13 2h-2.5A3.5 3.5 0 0 0 12 8.5V11h-2v3h2v7h3v-7h3v-3h-3V9a1 1 0 0 1 1-1h2V5z"/></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m13 4.75c-.56.25-1.16.4-1.8.48.64-.38 1.13-.98 1.36-1.7-.6.35-1.27.6-1.97.75-.56-.6-1.36-1-2.26-1-1.72 0-3.12 1.4-3.12 3.12 0 .24.03.48.08.7-2.6-.13-4.9-1.38-6.44-3.26-.27.46-.42 1-.42 1.57 0 1.08.55 2.04 1.38 2.6-.5 0-.98-.15-1.4-.38v.04c0 1.5 1.07 2.75 2.5 3.04-.26.08-.54.12-.82.12-.2 0-.4-.02-.59-.06.4 1.2 1.5 2.1 2.8 2.1-1 0-2.07-.35-3.02-1.1.13.8.7 1.4 1.5 1.8 1.3.1 2.5-.8 2.5-2.1z"/></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.8v8.37h2.8v-4.87c0-.26.05-.52.13-.7a1.11 1.11 0 0 1 .98-.7c.7 0 1.24.54 1.24 1.4v4.87h2.8M6.5 8.37a1.37 1.37 0 1 0 0-2.75 1.37 1.37 0 0 0 0 2.75M8 18.5V10.13H5V18.5h3z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Navigation</h4>
+                    <ul class="footer-menu">
+                        <li><a href="#hero">Home Base</a></li>
+                        <li><a href="#about">About Gwadar</a></li>
+                        <li><a href="#gallery">Media Focus</a></li>
+                        <li><a href="#issues">Key Challenges</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Direct Portals</h4>
+                    <ul class="footer-menu">
+                        <li><a href="#tankers">Find a Water Tanker</a></li>
+                        <li><a href="#report">File a Issue Report</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Gwadar Portal Hub. All Rights Reserved. Prepared for Gwadar community welfare.</p>
+                <p>Designed with Navy & Gold theme</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Logic -->
+    <script>
+        // --- 1. Dynamic Navigation & Scrolling Effects ---
+        const header = document.getElementById('header');
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+
+            // Highlighting links on scroll
+            let current = '';
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= (sectionTop - 120)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}` || (current === 'hero' && link.getAttribute('href') === '#')) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Toggle mobile menu
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu on link click
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // --- 2. Photo Gallery & Lightbox Logic ---
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxTitle = document.getElementById('lightboxTitle');
+        const lightboxDesc = document.getElementById('lightboxDesc');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxPrev = document.getElementById('lightboxPrev');
+        const lightboxNext = document.getElementById('lightboxNext');
+
+        let currentIndex = 0;
+
+        // Gallery data
+        const galleryData = [
+            {
+                src: "WhatsApp Image 2026-01-17 at 12.35.53 PM.jpeg",
+                title: "Gwadar City Aerial View",
+                desc: "Overlooking the hammerhead peninsula and the deep-sea harbor."
+            },
+            {
+                src: "9.jpeg",
+                title: "Coastal Highway",
+                desc: "The scenic Makran Coastal Highway connecting Karachi to Gwadar."
+            },
+            {
+                src: "11.jpeg",
+                title: "Cliffs at Sunset",
+                desc: "Golden rays reflecting off the majestic hammerhead cliffs."
+            },
+            {
+                src: "15.jpeg",
+                title: "Local Livelihoods",
+                desc: "Local women transporting water - reflecting the local supply challenges."
+            }
+        ];
+
+        function showImage(index) {
+            currentIndex = index;
+            lightboxImg.src = galleryData[index].src;
+            lightboxTitle.textContent = galleryData[index].title;
+            lightboxDesc.textContent = galleryData[index].desc;
+        }
+
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const index = parseInt(item.getAttribute('data-index'));
+                showImage(index);
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Stop scrolling
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; // Resume scrolling
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        lightboxPrev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            let index = currentIndex - 1;
+            if (index < 0) index = galleryData.length - 1;
+            showImage(index);
+        });
+
+        lightboxNext.addEventListener('click', (e) => {
+            e.stopPropagation();
+            let index = currentIndex + 1;
+            if (index >= galleryData.length) index = 0;
+            showImage(index);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.classList.contains('active')) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') lightboxPrev.click();
+                if (e.key === 'ArrowRight') lightboxNext.click();
+            }
+        });
+
+        // --- Supabase Setup ---
+        const SUPABASE_URL = 'https://rziyqqurvhxdmhwchuuq.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_xPiEKwgbj6WQ-2L4Gb9wWQ_sWKXdznH';
+
+        async function supabaseRequest(table, method, body = null) {
+            const url = `${SUPABASE_URL}/rest/v1/${table}`;
+            const headers = {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': method === 'POST' ? 'return=representation' : ''
+            };
+            const options = { method, headers };
+            if (body) options.body = JSON.stringify(body);
+            const res = await fetch(method === 'GET' ? `${url}?order=created_at.desc` : url, options);
+            if (!res.ok) {
+                const err = await res.text();
+                throw new Error(err);
+            }
+            return method === 'GET' ? res.json() : res;
+        }
+
+        // --- 3. Supabase: Water Tanker Directory ---
+        async function renderTankers(filterText = '') {
+            const listContainer = document.getElementById('tankerList');
+            listContainer.innerHTML = '<div class="empty-state">Loading tankers...</div>';
+            try {
+                let tankers = await supabaseRequest('tankers', 'GET');
+                if (filterText) {
+                    tankers = tankers.filter(t =>
+                        t.name.toLowerCase().includes(filterText.toLowerCase()) ||
+                        t.area.toLowerCase().includes(filterText.toLowerCase())
+                    );
+                }
+                listContainer.innerHTML = '';
+                if (tankers.length === 0) {
+                    listContainer.innerHTML = '<div class="empty-state">No tankers found. Be the first to add your number!</div>';
+                    return;
+                }
+                tankers.forEach(tanker => {
+                    const item = document.createElement('div');
+                    item.className = 'tanker-item';
+                    item.innerHTML = `
+                        <div class="tanker-info">
+                            <h4>${escapeHTML(tanker.name)}</h4>
+                            <p>${escapeHTML(tanker.area)}</p>
+                        </div>
+                        <a href="tel:${escapeHTML(tanker.phone)}" class="btn-call">
+                            <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.15 15.15 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                            Call ${escapeHTML(tanker.phone)}
+                        </a>
+                    `;
+                    listContainer.appendChild(item);
+                });
+            } catch(e) {
+                listContainer.innerHTML = '<div class="empty-state">Could not load tankers. Please refresh.</div>';
+            }
+        }
+
+        document.getElementById('searchTanker').addEventListener('input', (e) => {
+            renderTankers(e.target.value);
+        });
+
+        document.getElementById('tankerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('tankerName').value.trim();
+            const phone = document.getElementById('tankerPhone').value.trim();
+            const area = document.getElementById('tankerArea').value.trim();
+            if (name && phone && area) {
+                try {
+                    await supabaseRequest('tankers', 'POST', { name, phone, area });
+                    document.getElementById('tankerForm').reset();
+                    renderTankers();
+                    const toast = document.getElementById('tankerToast');
+                    toast.style.display = 'block';
+                    setTimeout(() => { toast.style.display = 'none'; }, 4000);
+                } catch(e) {
+                    alert('Error saving tanker. Please try again.');
+                }
+            }
+        });
+
+        // --- 4. Supabase: Reports Forum ---
+        async function renderReports() {
+            const board = document.getElementById('reportsBoard');
+            board.innerHTML = '<div class="empty-state">Loading reports...</div>';
+            try {
+                const reports = await supabaseRequest('complaints', 'GET');
+                board.innerHTML = '';
+                if (reports.length === 0) {
+                    board.innerHTML = '<div class="empty-state">No reports yet. Be the first to report an issue.</div>';
+                    return;
+                }
+                reports.forEach(report => {
+                    const item = document.createElement('div');
+                    item.className = 'report-item';
+                    const timeString = formatTime(report.created_at);
+                    item.innerHTML = `
+                        <div class="report-meta">
+                            <span class="report-author">${escapeHTML(report.name)}</span>
+                            <span class="report-category">${escapeHTML(report.category)}</span>
+                        </div>
+                        <div class="report-location">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            ${escapeHTML(report.location)} • <span style="font-size:0.75rem;color:var(--color-text-muted);">${timeString}</span>
+                        </div>
+                        <div class="report-message">${escapeHTML(report.message)}</div>
+                    `;
+                    board.appendChild(item);
+                });
+            } catch(e) {
+                board.innerHTML = '<div class="empty-state">Could not load reports. Please refresh.</div>';
+            }
+        }
+
+        document.getElementById('reportForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reporterName').value.trim();
+            const category = document.getElementById('reportCategory').value;
+            const location = document.getElementById('reportLocation').value.trim();
+            const message = document.getElementById('reportMessage').value.trim();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            if (name && category && location && message) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+                try {
+                    await supabaseRequest('complaints', 'POST', { name, category, location, message });
+                    document.getElementById('reportForm').reset();
+                    renderReports();
+                    const toast = document.getElementById('reportToast');
+                    toast.style.display = 'block';
+                    setTimeout(() => { toast.style.display = 'none'; }, 4000);
+                } catch(err) {
+                    alert('Error submitting report: ' + err.message);
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Report';
+                }
+            }
+        });
+
+        // --- 5. Helper Functions ---
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+
+        function formatTime(isoString) {
+            const date = new Date(isoString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+
+            if (diffMins < 1) return 'just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            
+            return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTankers();
+            renderReports();
+        });
+    </script>
+</body>
+</html>
